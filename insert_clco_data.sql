@@ -268,6 +268,8 @@ insert into Stored values
 
 	(6, 57001, 006, 1);
 
+
+
 insert into Stored values
 
 	(7, 57002, 001, 600);
@@ -290,11 +292,14 @@ insert into Stored values
 
 insert into Stored values
 
-	(12, 57002, 011, 3);
+	(12, 57002, 010, 3);
 
 insert into Stored values
 
 	(13, 57002, 011, 3);
+
+
+
 
 insert into Stored values
 
@@ -324,6 +329,8 @@ insert into Stored values
 
 	(20, 57003, 015, 3);
 
+
+
 insert into Stored values
 
 	(21, 57004, 009, 12);
@@ -346,7 +353,7 @@ insert into Stored values
 
 insert into Stored values
 
-	(26, 57004, 011, 2);
+	(26, 57004, 010, 2);
 
 insert into Stored values
 
@@ -376,6 +383,8 @@ insert into Stored values
 
 	(33, 57004, 021, 1);
 
+
+
 insert into Stored values
 
 	(34, 57005, 022, 55);
@@ -396,6 +405,8 @@ insert into Stored values
 
 	(38, 57005, 003, 2);
 
+
+
 insert into Stored values
 
 	(39, 57006, 024, 1);
@@ -406,7 +417,7 @@ insert into Stored values
 
 insert into Stored values
 
-	(41, 57006, 011, 2);
+	(41, 57006, 013, 2);
 
 insert into Stored values
 
@@ -420,6 +431,8 @@ insert into Stored values
 
 	(44, 57006, 015, 2);
 
+
+
 insert into Stored values
 
 	(45, 57007, 008, 6);
@@ -431,6 +444,8 @@ insert into Stored values
 insert into Stored values
 
 	(47, 57007, 010, 1);
+
+
 
 insert into Stored values
 
@@ -475,6 +490,8 @@ insert into Stored values
 insert into Stored values
 
 	(58, 57008, 005, 3);
+
+
 
 insert into Stored values
 
@@ -527,6 +544,8 @@ insert into Stored values
 insert into Stored values
 
 	(71, 57009, 041, 4);
+
+
 
 insert into Stored values
 
