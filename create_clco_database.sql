@@ -50,9 +50,9 @@ create table Storage
 
 	 primary key (storage_id),
 
-	 foreign key (build_id) references Building(build_id) ON DELETE SET NULL,
+	 foreign key (build_id) references Building(build_id) ON DELETE CASCADE,
 
-	 foreign key (storekey_id) references StoreKey(storekey_id) ON DELETE SET NULL
+	 foreign key (storekey_id) references StoreKey(storekey_id) ON DELETE CASCADE
 
 	) ENGINE = InnoDB;
 
@@ -70,8 +70,8 @@ create table Stored
 
 	 primary key (in_id),
 
-	 foreign key (storage_id) references Storage(storage_id) ON DELETE SET NULL,
+	 foreign key (storage_id) references Storage(storage_id) ON DELETE CASCADE,
 
-	 foreign key (item_id) references Item(item_id) ON DELETE SET NULL
+	 foreign key (item_id) references Item(item_id) ON DELETE CASCADE
 
 	) ENGINE = InnoDB;
