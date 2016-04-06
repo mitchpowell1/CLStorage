@@ -1,13 +1,13 @@
+__author__ = "Mitch Powell"
+
 from peewee import *
 
 database = MySQLDatabase('mdp9648', **{'user': 'app'})
 
-class UnknownField(object):
-    pass
-
 class BaseModel(Model):
     class Meta:
         database = database
+
 
 class Building(BaseModel):
     build = CharField(db_column='build_id', primary_key=True)
@@ -15,6 +15,7 @@ class Building(BaseModel):
 
     class Meta:
         db_table = 'Building'
+
 
 class Item(BaseModel):
     item_description = CharField(null=True)
@@ -24,12 +25,14 @@ class Item(BaseModel):
     class Meta:
         db_table = 'Item'
 
+
 class Storekey(BaseModel):
     storekey = CharField(db_column='storekey_id', primary_key=True)
     storekey_name = CharField(null=True)
 
     class Meta:
         db_table = 'StoreKey'
+
 
 class Storage(BaseModel):
     build = ForeignKeyField(db_column='build_id', null=True, rel_model=Building, to_field='build')
@@ -40,6 +43,7 @@ class Storage(BaseModel):
 
     class Meta:
         db_table = 'Storage'
+
 
 class Stored(BaseModel):
     in_ = CharField(db_column='in_id', primary_key=True)

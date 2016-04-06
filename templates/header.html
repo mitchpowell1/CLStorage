@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>CL Storage</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <!-- Bootstrap -->
+        <link href="{{url_for('static', filename='bootstrap/css/bootstrap.min.css')}}"rel="stylesheet" media="screen">
+    </head>
+    <header>
+        <div class="navbar">
+            <div class="navbar-inner">
+                <a class="brand" href="#">Campus Life Storage Organizer</a>
+                <ul class="nav pull-right">
+                    <li class="active"><a href="#">Search Storages</a></li>
+                    <li><a href="/testpage/">Reports</a></li>
+                    <li><a href="#">Log Changes</a></li>
+                </ul>
+            </div>
+        </div>
+    </header>
+
+    {% block body %}{% endblock %}
+
+      <script src="http://code.jquery.com/jquery.js"></script>
+      <script src="{{url_for('static', filename='bootstrap/js/bootstrap.min.js')}}"></script>
+    </html>
