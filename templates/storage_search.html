@@ -2,7 +2,62 @@
 
 {% block body %}
     <body>
-    {{in_item}}
-    {{building}}
+    <div class="container">
+        <h3>Where can I find a{% if item.item_name[0].lower() in 'aeiou'%}n{% endif %}
+            {{item.item_name}} {% if building != 'Any' %} in {{building}} {% endif %}?</h3>
+        {% if storages.count() != 0 %}
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>Storage Name</th>
+                <th>Room Number</th>
+                <th>Item Quantity</th>
+                {% if building == 'Any' %}<th>Building</th>{% endif %}
+              </tr>
+            </thead>
+            <tbody>
+            {% for storage in storages %}
+              <tr>
+                <td>{{storage.storage.room_name}}</td>
+                <td>{{storage.storage.room_number}}</td>
+                <td>{{storage.item_qty}}</td>
+                  {% if building == 'Any' %}
+                  <td> {{storage.storage.build.build_name}}</td>
+                  {% endif %}
+              </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p>Sadly, there are none</p>
+        {% endif %}
+        <div class="container">
+            <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#descriptionModal">
+                What is a{% if item.item_name[0].lower() in 'aeiou'%}n{% endif %} {{item.item_name}}?
+            </button>
+        </div>
+
+        <div class="modal fade" id="descriptionModal" tabindex="-1" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">{{item.item_name}} Description</h4>
+                    </div>
+                    <div class="modal-body">
+                        {% if item.item_description != None %}
+                        <p>{{item.item_description}}</p>
+                        {% else %}
+                        <p>Sorry, but no description is available for this item.</p>
+                        {% endif %}
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary">Save changes</button>
+                    </div>
+                    </div><!-- /.modal-content -->
+                  </div><!-- /.modal-dialog -->
+                </div><!-- /.modal -->
+    </div>
     </body>
 {% endblock %}

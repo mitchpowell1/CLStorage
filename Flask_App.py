@@ -17,12 +17,20 @@ def root():
 def select():
     in_item = request.form['item']
     building = request.form['building']
-    item = Item.get(Item.item_name == in_item).item
-    storages = Storage.select(Storage.room_name, Storage.room_number).join(Stored.select(Stored.item_qty).where(Stored. == item).get())
-    for storage_entry in storages:
-        print storage_entry.room_name
-    print item.item
-    return render_template('storage_search.html', item=in_item,  building = building)
+    item = Item.select().where(Item.item_name == in_item).get()
+    if building != "Any":
+        storages = Stored.select()\
+            .join(Item)\
+            .where(Item.item_name == in_item)\
+            .switch(Stored)\
+            .join(Storage)\
+            .join(Building)\
+            .where(Building.build_name == building)
+    else:
+        storages = Stored.select()\
+            .join(Item)\
+            .where(Item.item_name == in_item)
+    return render_template('storage_search.html', item=item, building=building, storages=storages)
 
 
 @app.route('/testpage/')
