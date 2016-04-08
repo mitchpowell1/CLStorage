@@ -4,7 +4,7 @@
     <body>
     <div class="container">
         <h3>Where can I find a{% if item.item_name[0].lower() in 'aeiou'%}n{% endif %}
-            {{item.item_name}} {% if building != 'Any' %} in {{building}} {% endif %}?</h3>
+            {{item.item_name}} {% if building != 'Any' %} in {{building}}{% endif %}?</h3>
         {% if storages.count() != 0 %}
         <table class="table table-striped">
             <thead>
