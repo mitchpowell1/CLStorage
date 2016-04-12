@@ -27,6 +27,11 @@ def close_connection(exc):
         database.close()
 
 
+###
+# This function routes to the homepage of the application
+# It renders a template containing two select boxes, corresponding with
+# the different available items and buildings respectively.
+###
 @app.route('/', methods=["GET", "POST"])
 def root():
     items = sorted([item.item_name for item in Item.select()])
@@ -34,6 +39,9 @@ def root():
     return render_template('index.html',  items = items, buildings=buildings)
 
 
+###
+# This function returns the results page for a storage search.
+###
 @app.route('/select/', methods=["POST"])
 def select():
     in_item = request.form['item']
@@ -54,6 +62,10 @@ def select():
     return render_template('storage_search.html', item=item, building=building, storages=storages)
 
 
+###
+# This function renders a template with a selector box for every storage,
+# separated by building labels
+###
 @app.route('/storage-reports/')
 def storage_audit():
     storages = {}
@@ -63,6 +75,10 @@ def storage_audit():
     return render_template('audit.html', storages=storages)
 
 
+###
+# This function renders a template for a storage audit, which tells all of the information about
+# a particular storage
+###
 @app.route('/generate-audit/', methods=["POST"])
 def gen_audit():
     st_name = request.form['storage']
@@ -86,6 +102,9 @@ def gen_audit():
     return render_template("storage_report.html", room_data=room_data)
 
 
+###
+# This function generates a sorted list of storage names for a given building
+###
 def get_storages(building_name):
     return sorted([storage.room_name for storage in
                    Storage.select().join(Building).where(Building.build_name == building_name)])
