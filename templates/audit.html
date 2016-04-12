@@ -1,0 +1,40 @@
+{% extends "header.html" %}
+{% block body %}
+        <body>
+            <div class="form-group container">
+                <h2>Show me a storage audit for:</h2>
+                <form action = '/generate-audit/' method="POST">
+                    <label for="storage">Select Storage:</label>
+                    <select class="form-control" id="storage" name="storage">
+                        <optgroup label="Fisher Student Center">
+                            {% for storage in storages["Fisher Student Center"] %}
+                            <option>{{storage}}</option>
+                            {% endfor %}
+                        </optgroup>
+                        <optgroup label="Fisher University Union">
+                            {% for storage in storages["Fisher University Union"]%}
+                            <option>
+                                {{storage}}
+                            </option>
+                            {% endfor %}
+                        </optgroup>
+                        <optgroup label="Burney Center">
+                            {% for storage in storages["Burney Center"] %}
+                            <option>
+                                {{storage}}
+                            </option>
+                            {% endfor %}
+                        </optgroup>
+                        <optgroup label="Warwick Center">
+                            {% for storage in storages["Warwick Center"] %}
+                            <option>
+                                {{storage}}
+                            </option>
+                            {% endfor %}
+                        </optgroup>
+                    </select>
+                    <input type="submit" value ="Go!">
+                </form>
+            </div>
+        </body>
+{% endblock %}

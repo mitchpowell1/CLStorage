@@ -54,9 +54,42 @@ def select():
     return render_template('storage_search.html', item=item, building=building, storages=storages)
 
 
-@app.route('/testpage/')
-def testpage():
-    return render_template('testpage.html')
+@app.route('/storage-reports/')
+def storage_audit():
+    storages = {}
+    for building in ["Fisher Student Center", "Fisher University Union", "Burney Center", "Warwick Center"]:
+        storages[building] = get_storages(building)
+
+    return render_template('audit.html', storages=storages)
+
+
+@app.route('/generate-audit/', methods=["POST"])
+def gen_audit():
+    st_name = request.form['storage']
+    storage = Storage.select().where(Storage.room_name == st_name)
+    stored = Stored.select().join(Storage).where(Storage.room_name == st_name)
+    room_items = []
+    room_qts = []
+    for entity in stored:
+        room_items.append(entity.item.item_name)
+        room_qts.append(entity.item_qty)
+    room_data=\
+        {
+            "name": storage[0].room_name,
+            "key": storage[0].storekey.storekey_name,
+            "building": storage[0].build.build_name,
+            "number": storage[0].room_number,
+            "items" : room_items,
+            "quantities": room_qts,
+            "numitems": len(room_items)
+        }
+    return render_template("storage_report.html", room_data=room_data)
+
+
+def get_storages(building_name):
+    return sorted([storage.room_name for storage in
+                   Storage.select().join(Building).where(Building.build_name == building_name)])
+
 
 if __name__ == '__main__':
     app.run()
