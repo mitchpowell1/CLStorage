@@ -2,8 +2,29 @@ __author__ = "Mitch Powell"
 from flask import Flask, render_template, make_response, request
 from models import *
 
-app = Flask(__name__)
+application = app = Flask(__name__)
 app.config["DEBUG"] = True
+
+
+###
+# This function should be called any time a request is sent.
+# It should prevent the database connection from timing out after
+# the app has been running for a few days.
+###
+@app.before_request
+def establish_connection():
+    database.connect()
+
+
+###
+# This function should be called any time a request is finished executing.
+# It will close the database connection so that the connection isn't
+# just sitting around idle.
+###
+@app.teardown_request
+def close_connection(exc):
+    if not database.is_closed():
+        database.close()
 
 
 @app.route('/', methods=["GET", "POST"])

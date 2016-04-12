@@ -3,35 +3,38 @@
 {% block body %}
     <body>
     <div class="container">
-        <h3>Where can I find a{% if item.item_name[0].lower() in 'aeiou'%}n{% endif %}
-            {{item.item_name}} {% if building != 'Any' %} in {{building}}{% endif %}?</h3>
+        <h3>Where can I find a{% if item.item_name[0].lower() in'aeiou'%}n{% endif %}
+            {{item.item_name}} {% if building != 'Any' %} in{{building}}{% endif %}?</h3>
         {% if storages.count() != 0 %}
-        <table class="table table-striped">
-            <thead>
-            <tr>
-                <th>Storage Name</th>
-                <th>Room Number</th>
-                <th>Item Quantity</th>
-                {% if building == 'Any' %}<th>Building</th>{% endif %}
-              </tr>
-            </thead>
-            <tbody>
-            {% for storage in storages %}
-              <tr>
-                <td>{{storage.storage.room_name}}</td>
-                <td>{{storage.storage.room_number}}</td>
-                <td>{{storage.item_qty}}</td>
-                  {% if building == 'Any' %}
-                  <td> {{storage.storage.build.build_name}}</td>
-                  {% endif %}
-              </tr>
-            {% endfor %}
-            </tbody>
-        </table>
+        <div id="no-more-tables" class="table-responsive">
+            <table class="table col-md-12 table-condensed  table-striped cf">
+                <thead class="cf">
+                <tr>
+                    <th>Storage Name</th>
+                    <th>Room Number</th>
+                    <th>Item Quantity</th>
+                    {% if building == 'Any' %}<th>Building</th>{% endif %}
+                  </tr>
+                </thead>
+                <tbody>
+                {% for storage in storages %}
+                  <tr>
+                    <td data-title="Storage Name">{{storage.storage.room_name}}</td>
+                    <td data-title="Room Number">{{storage.storage.room_number}}</td>
+                    <td data-title="Item Quantity">{{storage.item_qty}}</td>
+                      {% if building == 'Any' %}
+                      <td data-title="Building Name"> {{storage.storage.build.build_name}}</td>
+                      {% endif %}
+                  </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
         {% else %}
         <p>Sadly, there are none</p>
         {% endif %}
         <div class="container">
+			<a href="/" class="btn btn-default btn-lg" role="button">Take Me Home!</a>
             <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#descriptionModal">
                 What is a{% if item.item_name[0].lower() in 'aeiou'%}n{% endif %} {{item.item_name}}?
             </button>
@@ -53,7 +56,6 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary">Save changes</button>
                     </div>
                     </div><!-- /.modal-content -->
                   </div><!-- /.modal-dialog -->
