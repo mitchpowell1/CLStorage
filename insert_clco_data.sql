@@ -294,10 +294,6 @@ insert into Stored values
 
 insert into Stored values
 
-	(13, 57002, 011, 3);
-
-insert into Stored values
-
 	(14, 57003, 009, 39);
 
 insert into Stored values
@@ -348,9 +344,6 @@ insert into Stored values
 
 	(26, 57004, 011, 2);
 
-insert into Stored values
-
-	(27, 57004,011, 2);
 
 insert into Stored values
 
