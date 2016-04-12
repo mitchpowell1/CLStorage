@@ -6,6 +6,7 @@
         <!-- Bootstrap -->
         <link href="{{url_for('static', filename='bootstrap/css/bootstrap.min.css')}}"rel="stylesheet" media="screen">
         <link rel="stylesheet" href="{{url_for('static',filename='bootstrap/css/nomoretables.css')}}" media="screen">
+        <link rel="stylesheet" href="{{url_for('static',filename='bootstrap/css/login.css')}}" media="screen">
 
     </head>
     <header>
@@ -15,7 +16,20 @@
                 <ul class="nav pull-right">
                     <li><a href="/">Search Storages</a></li>
                     <li><a href="/storage-reports/">Storage Audit</a></li>
-                    <li><a href="#">Log Changes</a></li>
+                    <li><a href="#">Upates</a></li>
+			        <ul class="nav pull-right">
+                        <li class="dropdown" id="menuLogin">
+                            <a class="dropdown-toggle" href="#" data-toggle="dropdown" id="navLogin">Login</a>
+                            <div class="dropdown-menu" style="padding:17px;">
+                                <form class="form" id="formLogin">
+                                    <input name="username" id="username" placeholder="Username" type="text">
+                                    <input name="password" id="password" placeholder="Password" type="password"><br>
+                                    <button type="button" id="btnLogin" class="btn">Login</button>
+                                </form>
+                            </div>
+                        </li>
+                    </ul>
+                    </li>
                 </ul>
             </div>
         </div>

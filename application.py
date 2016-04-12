@@ -1,9 +1,11 @@
-__author__ = "Mitch Powell"
-from flask import Flask, render_template, make_response, request
+from flask import Flask, render_template, request
 from models import *
+from werkzeug.security import check_password_hash, generate_password_hash
 
 application = app = Flask(__name__)
 app.config["DEBUG"] = True
+
+__author__ = "Mitch Powell"
 
 
 ###
@@ -100,6 +102,15 @@ def gen_audit():
             "numitems": len(room_items)
         }
     return render_template("storage_report.html", room_data=room_data)
+
+
+###
+#
+#
+###
+@app.route('/login/', methods=["POST"])
+def user_login():
+    pass
 
 
 ###
