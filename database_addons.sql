@@ -28,49 +28,75 @@ create procedure find_item (IN item_name varchar(40))
 	END$$
 delimiter ;
 
-#Calculates the total amount  of each item and updates the Item table.
-#EX: call find_total()
-delimiter $$
-DROP PROCEDURE IF EXISTS find_total;
-create procedure find_total ()
-	DETERMINISTIC
-	BEGIN
-		create temporary table TempTable (item_id varchar(6),total_qty int);
-		insert into TempTable (select item_id, sum(item_qty) from Stored group by item_id);
-		
-		 if exists (select * from information_schema.columns where table_name = 'Item' and column_name = 'total_qty') 
-			then alter table Item drop column total_qty;
-		 end if;
-		alter table Item ADD total_qty int unsigned NOT NULL default 0;
-		
-		update Item
-		Item inner join TempTable on Item.item_id = TempTable.item_id
-		set Item.total_qty = TempTable.total_qty;
-		
-		drop table TempTable;
-	END$$
-delimiter ;
-
 #Move an item from one storage to another
-#EX: call move_item(001, 57008, 57010);
+#EX: call move_item(42,57008, 57001, 6);
 DROP PROCEDURE IF EXISTS move_item;
 delimiter $$
-create procedure move_item(item_id varchar(6), prev_storage_id varchar(6), new_storage_id varchar(6))
+create procedure move_item(item_id varchar(6), prev_storage_id varchar(6), new_storage_id varchar(6), quantity int unsigned)
 	BEGIN
+		declare qty_comp int unsigned;
 		declare exit handler for sqlexception
 			BEGIN
 				ROLLBACK;
 			END;
-		
 		start transaction;
-		if exists (select * from (Storage natural join Stored) 
-						join Item on Item.item_id = Stored.item_id 
-				   where item_id = Item.item_id and prev_storage_id = Stored.storage_id)
+
+		if exists (select * 
+				from Stored
+				where storage_id = prev_storage_id and Stored.item_id = item_id)		
 		
 		then 
-			update Stored
-			set storage_id = new_storage_id
-			where storage_id = prev_storage_id and item_id = Stored.item_id;
+		
+		select item_qty 
+			into qty_comp
+			from Stored 
+			where item_id = Stored.item_id and prev_storage_id = Stored.storage_id;
+			
+			if (quantity >= qty_comp)
+			then
+				
+				if exists(select * 
+						from Stored 
+						where storage_id = new_storage_id and Stored.item_id = item_id)
+				then
+					
+					update Stored
+					set Stored.item_qty = Stored.item_qty + qty_comp
+					where storage_id = new_storage_id and item_id = Stored.item_id;
+					
+					delete from Stored
+					where storage_id = prev_storage_id and item_id = Stored.item_id;
+					
+				else
+				
+					update Stored
+					set storage_id = new_storage_id
+					where storage_id = prev_storage_id and item_id = Stored.item_id;
+				
+				end if;
+				
+			else
+			
+				if exists(select * 
+						from Stored 
+						where storage_id = new_storage_id and Stored.item_id = item_id)
+				then
+					update Stored
+					set Stored.item_qty = Stored.item_qty + quantity
+					where storage_id = new_storage_id and item_id = Stored.item_id;
+				else
+					insert into Stored values
+						(new_storage_id, item_id, quantity);
+				end if;
+				
+				update Stored
+				set Stored.item_qty = Stored.item_qty - quantity
+				where storage_id = prev_storage_id and item_id = Stored.item_id;
+				
+			end if;
+			
+		else
+			select 'No item exists in given storage to move';
 		end if;
 		commit;
 	END$$
@@ -94,27 +120,4 @@ create function numItems(storage_id varchar(6))
 		RETURN count;
 	END$$
 delimiter ;
-		
-
-#Update the total qty of the items after an update or addition of an item
-drop trigger if exists updateTotal;
-delimiter $$
-create trigger updateTotal after update on Stored
-	FOR EACH ROW
-	BEGIN
-		call find_total();
-	END$$
 	
-delimiter ;
-
-drop trigger if exists updateTotal2;
-delimiter $$
-create trigger updateTotal2 after insert on Stored
-	FOR EACH ROW
-	BEGIN
-		call find_total();
-	END$$
-	
-delimiter ;
-
-call find_total();
