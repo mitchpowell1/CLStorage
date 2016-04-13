@@ -109,8 +109,10 @@ def gen_audit():
 #
 ###
 @app.route('/login/', methods=["POST"])
-def user_login():
-    pass
+def user_login(uname, pword):
+    pword_hash = generate_password_hash(pword)
+    check = check_password_hash(pword_hash, pword)
+    return check
 
 
 ###
