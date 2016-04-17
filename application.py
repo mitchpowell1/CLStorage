@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, session
 from models import *
-from werkzeug.security import check_password_hash, generate_password_hash
+from werkzeug.security import check_password_hash
 
 application = app = Flask(__name__)
 app.config["DEBUG"] = True
@@ -147,16 +147,25 @@ def move():
     return render_template('move.html', storages=storages)
 
 
+###
+# This function routes to the Add New Item Type button in the Updates menu
+###
 @app.route('/newitem/')
 def add_new_item():
     return render_template("newitem.html")
 
 
+###
+# This function routes to the Add Item to Storage button in the updates menu
+###
 @app.route('/additem/')
 def add_to_storage():
     return render_template("additem.html")
 
 
+###
+# This function routes to the Remove Item from Storage button in the updates menu
+###
 @app.route('/removeitem/')
 def remove_from_storage():
     return render_template("removeitem.html")
