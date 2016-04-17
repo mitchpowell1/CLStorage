@@ -1,0 +1,19 @@
+{% extends "header.html" %}
+{% block body %}
+        <body>
+            <div class="form-group container">
+                <h2>Remove Items From a Storage </h2>
+                <form action = '/select/' method="POST">
+                    <label for="item">Select Storage:</label>
+                    <select class="form-control" id="item", name="storage">
+                        <option>Put Storages Here</option>
+                    </select>
+                    <label for="building">Select Item:</label>
+                    <select class="form-control" id="building", name="item">
+                        <option>Put (valid) items here</option>
+                    </select>
+                    <input type="submit" value ="Go!"/>
+                </form>
+            </div>
+        </body>
+{% endblock %}

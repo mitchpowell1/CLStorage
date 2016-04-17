@@ -5,7 +5,7 @@ from werkzeug.security import check_password_hash, generate_password_hash
 application = app = Flask(__name__)
 app.config["DEBUG"] = True
 
-session_key = open("SESSION_KEY",'r').read().strip()
+session_key = open("SESSION_KEY", 'r').read().strip()
 
 app.secret_key = session_key
 
@@ -41,8 +41,8 @@ def close_connection(exc):
 @app.route('/', methods=["GET", "POST"])
 def root():
     items = sorted([item.item_name for item in Item.select()])
-    buildings= sorted([building.build_name for building in Building.select()])
-    return render_template('index.html',  items = items, buildings=buildings)
+    buildings = sorted([building.build_name for building in Building.select()])
+    return render_template('index.html', items=items, buildings=buildings)
 
 
 ###
@@ -54,16 +54,16 @@ def select():
     building = request.form['building']
     item = Item.select().where(Item.item_name == in_item).get()
     if building != "Any":
-        storages = Stored.select()\
-            .join(Item)\
-            .where(Item.item_name == in_item)\
-            .switch(Stored)\
-            .join(Storage)\
-            .join(Building)\
+        storages = Stored.select() \
+            .join(Item) \
+            .where(Item.item_name == in_item) \
+            .switch(Stored) \
+            .join(Storage) \
+            .join(Building) \
             .where(Building.build_name == building)
     else:
-        storages = Stored.select()\
-            .join(Item)\
+        storages = Stored.select() \
+            .join(Item) \
             .where(Item.item_name == in_item)
     return render_template('storage_search.html', item=item, building=building, storages=storages)
 
@@ -95,13 +95,13 @@ def gen_audit():
     for entity in stored:
         room_items.append(entity.item.item_name)
         room_qts.append(entity.item_qty)
-    room_data=\
+    room_data = \
         {
             "name": storage[0].room_name,
             "key": storage[0].storekey.storekey_name,
             "building": storage[0].build.build_name,
             "number": storage[0].room_number,
-            "items" : room_items,
+            "items": room_items,
             "quantities": room_qts,
             "numitems": len(room_items)
         }
@@ -113,11 +113,9 @@ def gen_audit():
 ###
 @app.route('/login/', methods=["POST"])
 def user_login():
-    print "Login routine entered"
     username = request.form['username']
     user = User.get(User.user_name == username)
-    print("User found")
-    if check_password_hash(user.user_pass,request.form['password']):
+    if check_password_hash(user.user_pass, request.form['password']):
         print("login successful")
         session['loggedin'] = True
     else:
@@ -132,6 +130,36 @@ def user_login():
 def user_logout():
     session['loggedin'] = False
     return root()
+
+
+###
+# This function corresponds with functionality to move items from one storage to another
+###
+@app.route('/move/')
+def move():
+    storages = [storage.room_name for storage in Storage.select()]
+    items = {}
+    for storage in storages:
+        stored = Stored.select().join(Storage).where(Storage.room_name == storage)
+        items[storage] = {entity.item.item_name: entity.item_qty for entity in stored}
+        print storage, items[storage]
+    print items["Burney Storage"]['Chair']
+    return render_template('move.html', storages=storages)
+
+
+@app.route('/newitem/')
+def add_new_item():
+    return render_template("newitem.html")
+
+
+@app.route('/additem/')
+def add_to_storage():
+    return render_template("additem.html")
+
+
+@app.route('/removeitem/')
+def remove_from_storage():
+    return render_template("removeitem.html")
 
 
 ###

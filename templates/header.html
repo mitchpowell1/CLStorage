@@ -16,7 +16,23 @@
                 <ul class="nav pull-right">
                     <li><a href="/">Search Storages</a></li>
                     <li><a href="/storage-reports/">Storage Audit</a></li>
-                    <li><a href="#">Upates</a></li>
+                    {% if session['loggedin'] %}
+                    <li class="dropdown" id="menuUpdate">
+                        <a class="dropdown-toggle" href="#" data-toggle="dropdown" id="updatesMenu">
+                            Updates
+                            </a>
+                              <ul class="dropdown-menu">
+                                  <li><a href="/move/">Move Items</a></li>
+                                  <li><a href="/newitem/">Add New Item Type</a></li>
+                                  <li><a href="/additem/">Add To Storage</a></li>
+                                  <li><a href="/removeitem/">Remove From Storage</a></li>
+                              </ul>
+                        </li>
+
+                    </li>
+                    {% else %}
+                    <li class="disabled"><a href="#">Updates</a></li>
+                    {% endif %}
 			        <ul class="nav pull-right">
                         {% if session['loggedin'] %}
                         <li><a href="/logout/">Log Out</a></li>

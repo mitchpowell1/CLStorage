@@ -1,0 +1,24 @@
+{% extends "header.html" %}
+{% block body %}
+<body>
+<div class="form-group container">
+    <h2>Move Some Stuff</h2>
+    <form action='/select/' method="POST">
+        <label for="item">Move From:</label>
+        <select class="form-control" id="item"  name="item">
+            {% for storage in storages %}
+            <option>{{storage}}</option>
+            {% endfor %}
+        </select>
+        <label for="building">Select Building:</label>
+        <select class="form-control" id="building" , name="building">
+            <option>Any</option>
+            {% for building in buildings %}
+            <option>{{building}}</option>
+            {% endfor %}
+        </select>
+        <input type="submit" value="Go!"/>
+    </form>
+</div>
+</body>
+{% endblock %}
