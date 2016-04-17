@@ -1,9 +1,13 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, session
 from models import *
 from werkzeug.security import check_password_hash, generate_password_hash
 
 application = app = Flask(__name__)
 app.config["DEBUG"] = True
+
+session_key = open("SESSION_KEY",'r').read().strip()
+
+app.secret_key = session_key
 
 __author__ = "Mitch Powell"
 
@@ -105,12 +109,29 @@ def gen_audit():
 
 
 ###
-#
-#
+# This function is triggered when a user is logged into the CLCO system
 ###
 @app.route('/login/', methods=["POST"])
 def user_login():
-    pass
+    print "Login routine entered"
+    username = request.form['username']
+    user = User.get(User.user_name == username)
+    print("User found")
+    if check_password_hash(user.user_pass,request.form['password']):
+        print("login successful")
+        session['loggedin'] = True
+    else:
+        print("login unsuccessful")
+    return root()
+
+
+###
+# This function logs the user out, and adjusts session variables accordingly
+###
+@app.route('/logout/')
+def user_logout():
+    session['loggedin'] = False
+    return root()
 
 
 ###

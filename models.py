@@ -1,8 +1,17 @@
-__author__ = "Mitch Powell"
-
+"""
+This file defines the classes corresponding with mysql tables for the PeeWee ORM.
+"""
 from peewee import *
 
+__author__ = "Mitch Powell"
+
+
 database = MySQLDatabase('mdp9648', **{'user': 'app'})
+
+
+class UnknownField(object):
+    pass
+
 
 class BaseModel(Model):
     class Meta:
@@ -46,11 +55,48 @@ class Storage(BaseModel):
 
 
 class Stored(BaseModel):
-    in_ = CharField(db_column='in_id', primary_key=True)
-    item = ForeignKeyField(db_column='item_id', null=True, rel_model=Item, to_field='item')
+    item = ForeignKeyField(db_column='item_id', rel_model=Item, to_field='item')
     item_qty = IntegerField(null=True)
-    storage = ForeignKeyField(db_column='storage_id', null=True, rel_model=Storage, to_field='storage')
+    storage = ForeignKeyField(db_column='storage_id', rel_model=Storage, to_field='storage')
 
     class Meta:
         db_table = 'Stored'
+        indexes = (
+            (('storage', 'item'), True),
+        )
+        primary_key = CompositeKey('item', 'storage')
+
+
+class User(BaseModel):
+    user_name = CharField(primary_key=True)
+    user_pass = CharField(null=True)
+
+    class Meta:
+        db_table = 'User'
+
+
+class Shortitem(BaseModel):
+    item = CharField(db_column='item_id')
+    item_name = CharField()
+
+    class Meta:
+        db_table = 'shortItem'
+
+
+class Storagesandkeymatches(BaseModel):
+    storage = CharField(db_column='storage_id')
+    storekey = CharField(db_column='storekey_id', null=True)
+
+    class Meta:
+        db_table = 'storagesAndKeyMatches'
+
+
+class Techstorages(BaseModel):
+    build = CharField(db_column='build_id', null=True)
+    room_name = CharField(null=True)
+    room_number = CharField(null=True)
+    storage = CharField(db_column='storage_id')
+
+    class Meta:
+        db_table = 'techStorages'
 

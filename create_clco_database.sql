@@ -73,3 +73,10 @@ create table Stored
 	 foreign key (item_id) references Item(item_id) ON DELETE CASCADE
 
 	) ENGINE = InnoDB;
+
+create table User
+    (
+    user_name varchar(30),
+    user_pass char(66),
+    primary key (user_name)
+     ) ENGINE = InnoDB;
