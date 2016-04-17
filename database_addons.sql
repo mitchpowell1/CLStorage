@@ -35,6 +35,7 @@ delimiter $$
 create procedure move_item(item_id varchar(6), prev_storage_id varchar(6), new_storage_id varchar(6), quantity int unsigned)
 	BEGIN
 		declare qty_comp int unsigned;
+
 		declare exit handler for sqlexception
 			BEGIN
 				ROLLBACK;
@@ -42,8 +43,8 @@ create procedure move_item(item_id varchar(6), prev_storage_id varchar(6), new_s
 		start transaction;
 
 		if exists (select * 
-				from Stored
-				where storage_id = prev_storage_id and Stored.item_id = item_id)		
+					from Stored
+					where storage_id = prev_storage_id and Stored.item_id = item_id)		
 		
 		then 
 		
@@ -56,8 +57,8 @@ create procedure move_item(item_id varchar(6), prev_storage_id varchar(6), new_s
 			then
 				
 				if exists(select * 
-						from Stored 
-						where storage_id = new_storage_id and Stored.item_id = item_id)
+							from Stored 
+							where storage_id = new_storage_id and Stored.item_id = item_id)
 				then
 					
 					update Stored
@@ -78,8 +79,8 @@ create procedure move_item(item_id varchar(6), prev_storage_id varchar(6), new_s
 			else
 			
 				if exists(select * 
-						from Stored 
-						where storage_id = new_storage_id and Stored.item_id = item_id)
+							from Stored 
+							where storage_id = new_storage_id and Stored.item_id = item_id)
 				then
 					update Stored
 					set Stored.item_qty = Stored.item_qty + quantity
@@ -112,12 +113,246 @@ create function numItems(storage_id varchar(6))
 	BEGIN
 		declare count int unsigned default 0;
 		set count = 0;
+		
 		select count(item_id) into count
-		from Stored 
-		where storage_id = Stored.storage_id
-		group by storage_id;
+			from Stored 
+			where storage_id = Stored.storage_id
+			group by storage_id;
 		
 		RETURN count;
 	END$$
 delimiter ;
-	
+
+create table Tracking
+	(log_id 	INT NOT NULL AUTO_INCREMENT,
+	 table_name 		varchar(50),
+	 attribute				varchar(50),
+	 old_value 			varchar(100),
+	 new_value			varchar(100),
+	 time_changed		datetime not null,
+	 primary key(log_id)
+	 )ENGINE = InnoDB;
+	 
+ALTER TABLE Tracking AUTO_INCREMENT=1001;
+	 
+drop trigger if exists storedUpdate;
+delimiter $$
+create trigger storedUpdate after update on Stored
+	FOR EACH ROW
+	BEGIN
+		if (NEW.storage_id != OLD.storage_id)then
+			insert into Tracking(table_name, attribute, old_value, new_value, time_changed) values 
+				('Stored', 'storage_id', OLD.storage_id, NEW.storage_id, NOW());
+		end if;
+		
+		if (NEW.item_id != OLD.item_id)then
+			insert into Tracking(table_name, attribute, old_value, new_value, time_changed) values
+				('Stored', 'item_id', OLD.item_id, NEW.item_id, NOW());
+		end if;
+		
+		if(NEW.item_qty != OLD.item_qty)then
+			insert into Tracking (table_name, attribute, old_value, new_value, time_changed) values
+				('Stored', 'item_id', OLD.item_qty, new.item_qty, NOW());
+		end if;
+	END$$
+delimiter ;
+
+drop trigger if exists storedInsert;
+delimiter $$
+create trigger storedInsert after insert on Stored
+	FOR EACH ROW
+	BEGIN
+		insert into Tracking(table_name, attribute, old_value, new_value, time_changed) values 
+			('Stored', 'Insertion', 'Insertion', NEW.storage_id, NOW());
+
+	END$$
+delimiter ;
+
+drop trigger if exists storedDelete;
+delimiter $$
+create trigger storedDelete after delete on Stored
+	FOR EACH ROW
+	BEGIN
+		insert into Tracking(table_name, attribute, old_value, new_value, time_changed) values 
+			('Stored', 'Deletion', OLD.storage_id, 'Deletion', NOW());
+		
+	END$$
+delimiter ;
+
+drop trigger if exists itemUpdate;
+delimiter $$
+create trigger itemUpdate after update on Item
+	FOR EACH ROW
+	BEGIN
+		if (NEW.item_id != OLD.item_id)then
+			insert into Tracking(table_name, attribute, old_value, new_value, time_changed) values 
+				('Item', 'item_id', OLD.item_id, NEW.item_id, NOW());
+		end if;
+		
+		if (NEW.item_name != OLD.item_name)then
+			insert into Tracking(table_name, attribute, old_value, new_value, time_changed) values
+				('Item', 'item_name', OLD.item_name, NEW.item_name, NOW());
+		end if;
+		
+		if(NEW.item_description != OLD.item_description)then
+			insert into Tracking (table_name, attribute, old_value, new_value, time_changed) values
+				('Item', 'item_description', OLD.item_description, new.item_description, NOW());
+		end if;
+	END$$
+delimiter ;
+
+drop trigger if exists itemInsert;
+delimiter $$
+create trigger itemInsert after insert on Item
+	FOR EACH ROW
+	BEGIN
+		insert into Tracking(table_name, attribute, old_value, new_value, time_changed) values 
+			('Item', 'Insertion', 'Insertion', NEW.item_id, NOW());
+
+	END$$
+delimiter ;
+
+drop trigger if exists itemDelete;
+delimiter $$
+create trigger itemDelete after delete on Item
+	FOR EACH ROW
+	BEGIN
+		insert into Tracking(table_name, attribute, old_value, new_value, time_changed) values 
+			('Item', 'Deletion', OLD.item_id, 'Deletion', NOW());
+		
+	END$$
+delimiter ;
+
+drop trigger if exists storageUpdate;
+delimiter $$
+create trigger storageUpdate after update on Storage
+	FOR EACH ROW
+	BEGIN
+		if (NEW.storage_id != OLD.storage_id)then
+			insert into Tracking(table_name, attribute, old_value, new_value, time_changed) values 
+				('Storage', 'storage_id', OLD.storage_id, NEW.storage_id, NOW());
+		end if;
+		
+		if (NEW.build_id != OLD.build_id)then
+			insert into Tracking(table_name, attribute, old_value, new_value, time_changed) values
+				('Storage', 'build_id', OLD.build_id, NEW.build_id, NOW());
+		end if;
+		
+		if(NEW.room_number != OLD.room_number)then
+			insert into Tracking (table_name, attribute, old_value, new_value, time_changed) values
+				('Storage', 'room_number', OLD.room_number, new.room_number, NOW());
+		end if;
+		
+		if(NEW.room_name != OLD.room_name)then
+			insert into Tracking (table_name, attribute, old_value, new_value, time_changed) values
+				('Storage', 'room_name', OLD.room_name, new.room_name, NOW());
+		end if;
+		
+		if(NEW.storekey_id != OLD.storekey_id)then
+			insert into Tracking (table_name, attribute, old_value, new_value, time_changed) values
+				('Storage', 'storekey_id', OLD.storekey_id, new.storekey_id, NOW());
+		end if;
+	END$$
+delimiter ;
+
+drop trigger if exists storageInsert;
+delimiter $$
+create trigger storageInsert after insert on Storage
+	FOR EACH ROW
+	BEGIN
+		insert into Tracking(table_name, attribute, old_value, new_value, time_changed) values 
+			('Storage', 'Insertion', 'Insertion', NEW.storage_id, NOW());
+
+	END$$
+delimiter ;
+
+drop trigger if exists storageDelete;
+delimiter $$
+create trigger storageDelete after delete on Storage
+	FOR EACH ROW
+	BEGIN
+		insert into Tracking(table_name, attribute, old_value, new_value, time_changed) values 
+			('Storage', 'Deletion', OLD.storage_id, 'Deletion', NOW());
+		
+	END$$
+delimiter ;
+		
+drop trigger if exists buildingUpdate;
+delimiter $$
+create trigger buildingUpdate after update on Building
+	FOR EACH ROW
+	BEGIN
+		if (NEW.build_id != OLD.build_id)then
+			insert into Tracking(table_name, attribute, old_value, new_value, time_changed) values 
+				('Building', 'build_id', OLD.build_id, NEW.build_id, NOW());
+		end if;
+		
+		if (NEW.build_name != OLD.build_name)then
+			insert into Tracking(table_name, attribute, old_value, new_value, time_changed) values
+				('Building', 'build_name', OLD.build_name, NEW.build_name, NOW());
+		end if;
+		
+	END$$
+delimiter ;
+
+drop trigger if exists buildingInsert;
+delimiter $$
+create trigger buildingInsert after insert on Building
+	FOR EACH ROW
+	BEGIN
+		insert into Tracking(table_name, attribute, old_value, new_value, time_changed) values 
+			('Building', 'Insertion', 'Insertion', NEW.build_id, NOW());
+
+	END$$
+delimiter ;
+
+drop trigger if exists buildingDelete;
+delimiter $$
+create trigger buildingDelete after delete on Building
+	FOR EACH ROW
+	BEGIN
+		insert into Tracking(table_name, attribute, old_value, new_value, time_changed) values 
+			('Building', 'Deletion', OLD.build_id, 'Deletion', NOW());
+		
+	END$$
+delimiter ;
+
+drop trigger if exists storekeyUpdate;
+delimiter $$
+create trigger storekeyUpdate after update on StoreKey
+	FOR EACH ROW
+	BEGIN
+		if (NEW.storekey_id != OLD.storekey_id)then
+			insert into Tracking(table_name, attribute, old_value, new_value, time_changed) values 
+				('StoreKey', 'storekey_id', OLD.storekey_id, NEW.storekey_id, NOW());
+		end if;
+		
+		if (NEW.storekey_name != OLD.storekey_name)then
+			insert into Tracking(table_name, attribute, old_value, new_value, time_changed) values
+				('StoreKey', 'storekey_name', OLD.storekey_name, NEW.storekey_name, NOW());
+		end if;
+		
+	END$$
+delimiter ;
+
+drop trigger if exists storekeyInsert;
+delimiter $$
+create trigger storekeyInsert after insert on StoreKey
+	FOR EACH ROW
+	BEGIN
+		insert into Tracking(table_name, attribute, old_value, new_value, time_changed) values 
+			('StoreKey', 'Insertion', 'Insertion', NEW.storekey_id, NOW());
+
+	END$$
+delimiter ;
+
+drop trigger if exists storekeyDelete;
+delimiter $$
+create trigger storekeyDelete after delete on StoreKey
+	FOR EACH ROW
+	BEGIN
+		insert into Tracking(table_name, attribute, old_value, new_value, time_changed) values 
+			('StoreKey', 'Deletion', OLD.storekey_id, 'Deletion', NOW());
+		
+	END$$
+delimiter ;
