@@ -1,0 +1,48 @@
+{% extends "header.html" %}
+
+{% block body %}
+    <body>
+    <div class="container">
+        <h4>Storage Data</h4>
+        <table class="table table-bordered table-condensed">
+            <tbody>
+            <tr>
+                <td>Storage Name:</td>
+                <td>{{room_data["name"]}}</td>
+            </tr>
+            <tr>
+                <td>Building:</td>
+                <td>{{room_data["building"]}}</td>
+            </tr>
+            <tr>
+                <td>Room #:</td>
+                <td>{{room_data["number"]}}</td>
+            </tr>
+            <tr>
+                <td>Key:</td>
+                <td>{{room_data["key"]}}</td>
+            </tr>
+            </tbody>
+        </table>
+        <h4>Storage Contents</h4>
+        <div id="no-more-tables" class="table-responsive">
+            <table class="table col-md-12 table-condensed  table-striped cf">
+                <thead class="cf">
+                    <tr>
+                        <th>Item Name</th>
+                        <th>Item Quantity</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for x in range(room_data['numitems']) %}
+                    <tr>
+                        <td data-title="Item Name">{{room_data["items"][x]}}</td>
+                        <td data-title="Item Quantity">{{room_data["quantities"][x]}}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    </body>
+{% endblock %}

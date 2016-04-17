@@ -1,3 +1,9 @@
+delete from Stored;
+delete from Storage;
+delete from Building;
+delete from StoreKey;
+delete from Item;
+
 insert into Building values
 
 	('FSC','Fisher Student Center');
@@ -246,355 +252,353 @@ insert into Storage values
 
 insert into Stored values
 
-	(1, 57001, 001, 50);
+	(57001, 001, 50);
 
 insert into Stored values
 
-	(2, 57001, 002, 10);
+	(57001, 002, 10);
 
 insert into Stored values
 
-	(3, 57001, 003, 5);
+	(57001, 003, 5);
 
 insert into Stored values
 
-	(4, 57001, 004, 1);
+	(57001, 004, 1);
 
 insert into Stored values
 
-	(5, 57001, 005, 1);
+	(57001, 005, 1);
 
 insert into Stored values
 
-	(6, 57001, 006, 1);
+	(57001, 006, 1);
 
 
 
 insert into Stored values
 
-	(7, 57002, 001, 600);
+	(57002, 001, 600);
 
 insert into Stored values
 
-	(8, 57002, 007, 20);
+	(57002, 007, 20);
 
 insert into Stored values
 
-	(9, 57002, 008, 55);
+	(57002, 008, 55);
 
 insert into Stored values
 
-	(10, 57002, 009, 65);
+	(57002, 009, 65);
 
 insert into Stored values
 
-	(11, 57002, 02, 5);
+	(57002, 02, 5);
 
 insert into Stored values
 
-	(12, 57002, 010, 3);
+	(57002, 010, 3);
 
 insert into Stored values
 
-	(13, 57002, 011, 3);
+	(57002, 011, 3);
 
 
 
 
 insert into Stored values
 
-	(14, 57003, 009, 39);
+	(57003, 009, 39);
 
 insert into Stored values
 
-	(15, 57003, 02, 8);
+	(57003, 02, 8);
 
 insert into Stored values
 
-	(16, 57003, 001, 183);
+	(57003, 001, 183);
 
 insert into Stored values
 
-	(17, 57003, 003, 35);
+	(57003, 003, 35);
 
 insert into Stored values
 
-	(18, 57003, 013, 1);
+	(57003, 013, 1);
 
 insert into Stored values
 
-	(19, 57003, 014, 5);
+	(57003, 014, 5);
 
 insert into Stored values
 
-	(20, 57003, 015, 3);
+	(57003, 015, 3);
 
 
 
 insert into Stored values
 
-	(21, 57004, 009, 12);
+	(57004, 009, 12);
 
 insert into Stored values
 
-	(22, 57004, 003, 10);
+	(57004, 003, 10);
 
 insert into Stored values
 
-	(23, 57004, 016, 12);
+	(57004, 016, 12);
 
 insert into Stored values
 
-	(24, 57004, 017, 21);
+	(57004, 017, 21);
 
 insert into Stored values
 
-	(25, 57004, 018, 2);
+	(57004, 018, 2);
 
 insert into Stored values
 
-	(26, 57004, 010, 2);
+	(57004, 010, 2);
 
 insert into Stored values
 
-	(27, 57004,011, 2);
+	(57004,011, 2);
 
 insert into Stored values
 
-	(28, 57004, 001, 50);
+	(57004, 001, 50);
 
 insert into Stored values
 
-	(29, 57004, 007, 1);
+	(57004, 007, 1);
 
 insert into Stored values
 
-	(30, 57004, 019, 15);
+	(57004, 019, 15);
 
 insert into Stored values
 
-	(31, 57004, 020, 3);
+	(57004, 020, 3);
 
 insert into Stored values
 
-	(32, 57004, 014, 2);
+	(57004, 014, 2);
 
 insert into Stored values
 
-	(33, 57004, 021, 1);
+	(57004, 021, 1);
 
 
 
 insert into Stored values
 
-	(34, 57005, 022, 55);
+	(57005, 022, 55);
 
 insert into Stored values
 
-	(35, 57005, 009, 5);
+	(57005, 009, 5);
 
 insert into Stored values
 
-	(36, 57005, 023, 1);
+	(57005, 023, 1);
 
 insert into Stored values
 
-	(37, 57005, 004, 1);
+	(57005, 004, 1);
 
 insert into Stored values
 
-	(38, 57005, 003, 2);
+	(57005, 003, 2);
 
-
-
 insert into Stored values
 
-	(39, 57006, 024, 1);
+	(57006, 024, 1);
 
 insert into Stored values
 
-	(40, 57006, 025, 1);
+	(57006, 025, 1);
 
 insert into Stored values
 
-	(41, 57006, 013, 2);
+	(57006, 013, 2);
 
 insert into Stored values
 
-	(42, 57006, 004, 1);
+	(57006, 004, 1);
 
 insert into Stored values
 
-	(43, 57006, 007, 4);
+	(57006, 007, 4);
 
 insert into Stored values
-
-	(44, 57006, 015, 2);
 
+	(57006, 015, 2);
 
 
 insert into Stored values
 
-	(45, 57007, 008, 6);
+	(57007, 008, 6);
 
 insert into Stored values
 
-	(46, 57007, 02, 15);
+	(57007, 02, 15);
 
 insert into Stored values
 
-	(47, 57007, 010, 1);
+	(57007, 010, 1);
 
 
 
 insert into Stored values
 
-	(48, 57008, 002, 18);
+	(57008, 002, 18);
 
 insert into Stored values
 
-	(49, 57008, 003, 10);
+	(57008, 003, 10);
 
 insert into Stored values
 
-	(50, 57008, 001, 120);
+	(57008, 001, 120);
 
 insert into Stored values
 
-	(51, 57008, 008, 8);
+	(57008, 008, 8);
 
 insert into Stored values
 
-	(52, 57008, 010, 2);
+	(57008, 010, 2);
 
 insert into Stored values
 
-	(53, 57008, 024, 1);
+	(57008, 024, 1);
 
 insert into Stored values
 
-	(54, 57008, 027, 1);
+	(57008, 027, 1);
 
 insert into Stored values
 
-	(55, 57008, 011, 2);
+	(57008, 011, 2);
 
 insert into Stored values
 
-	(56, 57008, 006, 1);
+	(57008, 006, 1);
 
 insert into Stored values
 
-	(57, 57008, 028, 1);
+	(57008, 028, 1);
 
 insert into Stored values
 
-	(58, 57008, 005, 3);
+	(57008, 005, 3);
 
 
 
 insert into Stored values
 
-	(59, 57009, 029, 2);
+	(57009, 029, 2);
 
 insert into Stored values
 
-	(60, 57009, 030, 4);
+	(57009, 030, 4);
 
 insert into Stored values
 
-	(61, 57009, 031, 1);
+	(57009, 031, 1);
 
 insert into Stored values
 
-	(62, 57009, 032, 15);
+	(57009, 032, 15);
 
 insert into Stored values
 
-	(63, 57009, 034, 1);
+	(57009, 034, 1);
 
 insert into Stored values
 
-	(64, 57009, 035, 5);
+	(57009, 035, 5);
 
 insert into Stored values
 
-	(65, 57009, 036, 7);
+	(57009, 036, 7);
 
 insert into Stored values
 
-	(66, 57009, 037, 7);
+	(57009, 037, 7);
 
 insert into Stored values
 
-	(67, 57009, 015, 3);
+	(57009, 015, 3);
 
 insert into Stored values
 
-	(68, 57009, 038, 3);
+	(57009, 038, 3);
 
 insert into Stored values
 
-	(69, 57009, 039, 4);
+	(57009, 039, 4);
 
 insert into Stored values
 
-	(70, 57009, 040, 2);
+	(57009, 040, 2);
 
 insert into Stored values
 
-	(71, 57009, 041, 4);
+	(57009, 041, 4);
 
 
 
 insert into Stored values
 
-	(72, 57010, 042, 6);
+	(57010, 042, 6);
 
 insert into Stored values
 
-	(73, 57010, 043, 4);
+	(57010, 043, 4);
 
 insert into Stored values
 
-	(74, 57010, 032, 10);
+	(57010, 032, 10);
 
 insert into Stored values
 
-	(75, 57010, 044, 2);
+	(57010, 044, 2);
 
 insert into Stored values
 
-	(76, 57010, 038, 1);
+	(57010, 038, 1);
 
 insert into Stored values
 
-	(77, 57010, 029, 9);
+	(57010, 029, 9);
 
 insert into Stored values
 
-	(78, 57010, 031, 5);
+	(57010, 031, 5);
 
 insert into Stored values
 
-	(79, 57010, 036, 12);
+	(57010, 036, 12);
 
 insert into Stored values
 
-	(80, 57010, 035, 5);
+	(57010, 035, 5);
 
 insert into Stored values
 
-	(81, 57010, 045, 6);
+	(57010, 045, 6);
 
 insert into Stored values
 
-	(82, 57010, 046, 6);
+	(57010, 046, 6);
 
 insert into Stored values
 
-	(83, 57010, 034, 3);
+	(57010, 034, 3);
 
 insert into Stored values
 
-	(84, 57010, 15, 5);
+	(57010, 15, 5);
+	

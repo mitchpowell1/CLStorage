@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>CL Storage</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <!-- Bootstrap -->
+        <link href="{{url_for('static', filename='bootstrap/css/bootstrap.min.css')}}"rel="stylesheet" media="screen">
+        <link rel="stylesheet" href="{{url_for('static',filename='bootstrap/css/nomoretables.css')}}" media="screen">
+        <link rel="stylesheet" href="{{url_for('static',filename='bootstrap/css/login.css')}}" media="screen">
+
+    </head>
+    <header>
+        <div class="navbar">
+            <div class="navbar-inner">
+                <a class="brand" href="/">Campus Life Storage Organizer</a>
+                <ul class="nav pull-right">
+                    <li><a href="/">Search Storages</a></li>
+                    <li><a href="/storage-reports/">Storage Audit</a></li>
+                    <li><a href="#">Upates</a></li>
+			        <ul class="nav pull-right">
+                        {% if session['loggedin'] %}
+                        <li><a href="/logout/">Log Out</a></li>
+                        {% else %}
+                        <li class="dropdown" id="menuLogin">
+                            <a class="dropdown-toggle" href="#" data-toggle="dropdown" id="navLogin">Login</a>
+                            <div class="dropdown-menu" style="padding:17px;">
+                                <form class="form" id="formLogin" action="/login/" method="POST">
+                                    <input name="username" id="username" placeholder="Username" type="text">
+                                    <input name="password" id="password" placeholder="Password" type="password"><br>
+                                    <button type="Submit" id="btnLogin" class="btn">Login</button>
+                                </form>
+                            </div>
+                        </li>
+                        {% endif %}
+                    </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </header>
+
+    {% block body %}{% endblock %}
+
+      <script src="http://code.jquery.com/jquery.js"></script>
+      <script src="{{url_for('static', filename='bootstrap/js/bootstrap.min.js')}}"></script>
+    </html>
