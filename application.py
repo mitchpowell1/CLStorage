@@ -189,10 +189,19 @@ def add_new_item():
 ###
 @app.route('/submit-new-item/',methods=['POST'])
 def submit_new_item():
-    Item.create(
-        item_name=request.form['itemName'].strip(),
-        item_description=request.form['itemDescription'].strip()
-    )
+    item_name = request.form['itemName'].strip()
+    if len(item_name) == 0:
+        message = "Please Enter a Valid Item Name"
+        return render_template("newitem.html", message=message)
+    else:
+        try:
+            Item.create(
+                item_name=request.form['itemName'].strip(),
+                item_description=request.form['itemDescription'].strip()
+            )
+        except IntegrityError:
+            message = "Item '"+item_name+"' already exists."
+            return render_template("newitem.html", message=message)
     return root("Item Type Added!")
 
 

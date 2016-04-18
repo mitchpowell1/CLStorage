@@ -21,7 +21,11 @@
                     <label for="itemDescription">Item Description (200 Characters Max):</label>
                     <textarea class="form-control" rows="3" maxlength="200" id="itemDescription" name="itemDescription"></textarea>
                 </div>
-
+                {% if message %}
+                <div class="alert alert-danger">
+                {{ message }}
+                </div>
+                {% endif %}
                 <input type="submit" value="Add">
             </form>
 

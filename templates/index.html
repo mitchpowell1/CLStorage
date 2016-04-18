@@ -2,13 +2,12 @@
 
 {% block body %}
         <body>
-        {% if messages %}
-        <div class="alert alert-danger">
-            {{messages}}
-        </div>
-        {% endif %}
-
             <div class="form-group container">
+                {% if messages %}
+                <div class="alert alert-success">
+                {{messages}}
+                </div>
+                {% endif %}
                 <h2>I'm looking for a... </h2>
                 <form action = '/select/' method="POST">
                     <label for="item">Select Item:</label>
@@ -24,6 +23,7 @@
                         <option>{{building}}</option>
                         {% endfor %}
                     </select>
+
                     <input type="submit" value ="Go!"/>
                 </form>
             </div>
