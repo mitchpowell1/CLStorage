@@ -39,10 +39,10 @@ def close_connection(exc):
 # the different available items and buildings respectively.
 ###
 @app.route('/', methods=["GET", "POST"])
-def root():
+def root(messages=None):
     items = sorted([item.item_name for item in Item.select()])
     buildings = sorted([building.build_name for building in Building.select()])
-    return render_template('index.html', items=items, buildings=buildings)
+    return render_template('index.html', items=items, buildings=buildings, messages=messages)
 
 
 ###
@@ -142,9 +142,38 @@ def move():
     for storage in storages:
         stored = Stored.select().join(Storage).where(Storage.room_name == storage)
         items[storage] = {entity.item.item_name: entity.item_qty for entity in stored}
-        print storage, items[storage]
-    print items["Burney Storage"]['Chair']
-    return render_template('move.html', storages=storages)
+    return render_template('move.html', storages=storages, items=items)
+
+
+###
+# This function is used to complete the move method once the storage is selected
+###
+@app.route('/move-from/', methods=['POST'])
+def move_from():
+    storage_name = request.form['storage']
+    storage_items = [entity.item.item_name
+                     for entity in Stored.select().join(Storage).where(Storage.room_name == storage_name)]
+    to_storages = [storage.room_name
+                   for storage in Storage.select().where(Storage.room_name != storage_name)]
+    return render_template("movefrom.html", storage_name=storage_name, storage_items=storage_items,
+                           to_storages=to_storages)
+
+
+###
+# This function submits the final changes of a move operation to the database
+###
+@app.route('/submit-move/<storage_name>', methods=['POST'])
+def submit_move(storage_name):
+    number = request.form['quantity']
+    item = Item.get(Item.item_name == request.form['item'].strip()).get_id()
+    print item
+    to_storage = Storage.get(Storage.room_name == request.form['toStorage'].strip()).get_id()
+    from_storage = Storage.get(Storage.room_name == storage_name.strip()).get_id()
+    procargs=(item,from_storage,to_storage,number)
+    cursor = database.get_cursor()
+    cursor.callproc("move_item",procargs)
+    cursor.close()
+    return root("Item Successfully moved")
 
 
 ###
@@ -153,6 +182,18 @@ def move():
 @app.route('/newitem/')
 def add_new_item():
     return render_template("newitem.html")
+
+
+###
+# Finalizes the submission of a new item type
+###
+@app.route('/submit-new-item/',methods=['POST'])
+def submit_new_item():
+    Item.create(
+        item_name=request.form['itemName'].strip(),
+        item_description=request.form['itemDescription'].strip()
+    )
+    return root("Item Type Added!")
 
 
 ###

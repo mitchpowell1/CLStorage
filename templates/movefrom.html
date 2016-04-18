@@ -1,0 +1,27 @@
+{% extends "header.html" %}
+{% block body %}
+<body>
+<div class="form-group container">
+    <h2>Move Item From {{storage_name}}</h2>
+    <form action='/submit-move/{{storage_name}}' method="POST">
+        <label for="quantity">Move:</label>
+        <input type="number" class="form-control" id="quantity" name="quantity" min="1" value="1">
+
+        <label for="item">Of Item:</label>
+        <select class="form-control" id="item"  name="item">
+            {% for item in storage_items %}
+            <option>{{item}}</option>
+            {% endfor %}
+        </select>
+
+        <label for="toStorage">To:</label>
+        <select class="form-control" id="toStorage" name="toStorage">
+            {% for storage in to_storages %}
+            <option>{{storage}}</option>
+            {% endfor %}
+        </select>
+        <input type="submit" value="Select"/>
+    </form>
+</div>
+</body>
+{% endblock  %}

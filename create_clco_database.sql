@@ -12,9 +12,9 @@ create table Building
 
 create table Item
 
-	(item_id			varchar(6),
+	(item_id			int auto_increment,
 
-	 item_name			varchar(40) not null,
+	 item_name			varchar(40) not null unique,
 
 	 item_description	varchar(200),
 
@@ -62,7 +62,7 @@ create table Stored
 
 	(storage_id			varchar(6),
 
-	 item_id 			varchar(6),
+	 item_id 			int,
 
 	 item_qty			int unsigned,
 
