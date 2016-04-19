@@ -218,7 +218,42 @@ def add_to_storage():
 ###
 @app.route('/removeitem/')
 def remove_from_storage():
-    return render_template("removeitem.html")
+    storages = sorted([storage.room_name for storage in Storage.select()])
+    return render_template("removeitem.html", storages=storages)
+
+
+###
+# This function routes to the removal page once a storage has been selected
+###
+@app.route("/remove-from/", methods = ["POST"])
+def remove_from_selected():
+    storage_name = request.form['storage']
+    storage_items = [entity.item.item_name
+                     for entity in Stored.select().join(Storage).where(Storage.room_name == storage_name)]
+    return render_template("removefrom.html", storage_name=storage_name, storage_items=storage_items)
+
+
+###
+# This function is triggered when items are selected to be removed from a storage
+###
+@app.route('/submit-remove/<storage_name>', methods=["POST"])
+def submit_remove(storage_name):
+    storage = Storage.get(Storage.room_name == storage_name)
+    item = Item.get(Item.item_name == request.form['item'])
+    stored = Stored.get(Stored.storage == storage, Stored.item == item)
+    print(stored.item_qty)
+    if stored.item_qty < int(request.form['quantity']):
+        storage_items = [entity.item.item_name for entity in Stored.select().join(Storage)
+            .where(Storage.room_name == storage_name)]
+        return render_template('removefrom.html', storage_name=storage_name, storage_items=storage_items,
+                               warnings="There are not that many "+request.form['item']+"s in the storage")
+    elif stored.item_qty == int(request.form['quantity']):
+        stored.delete_instance()
+        return root("All "+request.form['item']+"s successfuly removed from "+storage_name)
+    else:
+        stored.item_qty -= int(request.form(['quantity']))
+        stored.save()
+        return root(request.form['quantity']+" "+request.form['item']+"s successfully removed from "+storage_name)
 
 
 ###
