@@ -251,7 +251,7 @@ def submit_remove(storage_name):
         stored.delete_instance()
         return root("All "+request.form['item']+"s successfuly removed from "+storage_name)
     else:
-        stored.item_qty -= int(request.form(['quantity']))
+        stored.item_qty = (stored.item_qty - int(request.form['quantity']))
         stored.save()
         return root(request.form['quantity']+" "+request.form['item']+"s successfully removed from "+storage_name)
 
