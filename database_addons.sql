@@ -1,4 +1,5 @@
-#define views
+#Define views
+#Note: totalItemQty view is after findItemQty function
 drop view if exists shortItem;
 create view shortItem as
 	select item_id, item_name
@@ -102,6 +103,30 @@ create procedure move_item(item_id varchar(6), prev_storage_id varchar(6), new_s
 		commit;
 	END$$
 delimiter ;
+
+#Return the total quantity of a particular item (from all storages)
+#Ex: select item_id, findItemQty(item_id) from Item;
+drop function if exists findItemQty;
+delimiter $$
+create function findItemQty(search_id varchar(6))
+	returns int unsigned
+	DETERMINISTIC
+	BEGIN
+		declare count int unsigned default 0;
+		set count = 0;
+		
+		select sum(item_qty) into count
+			from Stored
+			where search_id = item_id
+			group by item_id;
+		return count;
+	END$$
+delimiter ;
+
+drop view if exists totalItemQty;
+create view totalItemQty as
+	select item_id, findItemQty(item_id)
+	from Item;
 
 #Return the total number of items in the given storage
 #EX: select numItems(57010);
@@ -356,3 +381,51 @@ create trigger storekeyDelete after delete on StoreKey
 		
 	END$$
 delimiter ;
+		
+/* UNUSED
+#Calculates the total amount  of each item and updates the Item table.
+#EX: call find_total()
+delimiter $$
+DROP PROCEDURE IF EXISTS find_total;
+create procedure find_total ()
+	DETERMINISTIC
+	BEGIN
+		create temporary table TempTable (item_id varchar(6),total_qty int);
+		insert into TempTable (select item_id, sum(item_qty) from Stored group by item_id);
+		
+		 if exists (select * from information_schema.columns where table_name = 'Item' and column_name = 'total_qty') 
+			then alter table Item drop column total_qty;
+		 end if;
+		alter table Item ADD total_qty int unsigned NOT NULL default 0;
+		
+		update Item
+		Item inner join TempTable on Item.item_id = TempTable.item_id
+		set Item.total_qty = TempTable.total_qty;
+		
+		drop table TempTable;
+	END$$
+delimiter ;
+
+#Update the total qty of the items after an update or addition of an item
+drop trigger if exists updateTotal;
+delimiter $$
+create trigger updateTotal after update on Stored
+	FOR EACH ROW
+	BEGIN
+		call find_total();
+	END$$
+	
+delimiter ;
+
+drop trigger if exists updateTotal2;
+delimiter $$
+create trigger updateTotal2 after insert on Stored
+	FOR EACH ROW
+	BEGIN
+		call find_total();
+	END$$
+	
+delimiter ;
+
+call find_total();
+*/
