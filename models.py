@@ -28,8 +28,8 @@ class Building(BaseModel):
 
 class Item(BaseModel):
     item_description = CharField(null=True)
-    item = CharField(db_column='item_id', primary_key=True)
-    item_name = CharField()
+    item = PrimaryKeyField(db_column='item_id')
+    item_name = CharField(unique=True)
 
     class Meta:
         db_table = 'Item'
@@ -67,6 +67,18 @@ class Stored(BaseModel):
         primary_key = CompositeKey('item', 'storage')
 
 
+class Tracking(BaseModel):
+    attribute = CharField(null=True)
+    log = PrimaryKeyField(db_column='log_id')
+    new_value = CharField(null=True)
+    old_value = CharField(null=True)
+    table_name = CharField(null=True)
+    time_changed = DateTimeField()
+
+    class Meta:
+        db_table = 'Tracking'
+
+
 class User(BaseModel):
     user_name = CharField(primary_key=True)
     user_pass = CharField(null=True)
@@ -76,7 +88,7 @@ class User(BaseModel):
 
 
 class Shortitem(BaseModel):
-    item = CharField(db_column='item_id')
+    item = IntegerField(db_column='item_id')
     item_name = CharField()
 
     class Meta:
@@ -100,3 +112,10 @@ class Techstorages(BaseModel):
     class Meta:
         db_table = 'techStorages'
 
+
+class Totalitemqty(BaseModel):
+    item = IntegerField(db_column='item_id')
+    total = IntegerField(null=True)
+
+    class Meta:
+        db_table = 'totalItemQty'

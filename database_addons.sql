@@ -125,7 +125,7 @@ delimiter ;
 
 drop view if exists totalItemQty;
 create view totalItemQty as
-	select item_id, findItemQty(item_id)
+	select item_id, findItemQty(item_id) as total
 	from Item;
 
 #Return the total number of items in the given storage
