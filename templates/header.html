@@ -15,7 +15,16 @@
                 <a class="brand" href="/">Campus Life Storage Organizer</a>
                 <ul class="nav pull-right">
                     <li><a href="/">Search Storages</a></li>
-                    <li><a href="/storage-reports/">Storage Audit</a></li>
+                    <li class="dropdown" id="menuAudit">
+                        <a class="dropdown-toggle" href="#" data-toggle="dropdown" id="auditMenu">
+                            Audit
+                            </a>
+                              <ul class="dropdown-menu">
+                                  <li><a href="/storage-reports/">Storage Audit</a></li>
+                                  <li><a href="/item-reports/">Item Audit</a></li>
+                                  <li><a href="/logs/">Movement Logs</a></li>
+                              </ul>
+                        </li>
                     {% if session['loggedin'] %}
                     <li class="dropdown" id="menuUpdate">
                         <a class="dropdown-toggle" href="#" data-toggle="dropdown" id="updatesMenu">

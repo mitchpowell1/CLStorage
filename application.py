@@ -82,6 +82,28 @@ def storage_audit():
 
 
 ###
+# Generates an Item Report page
+###
+@app.route('/item-reports/')
+def item_audit():
+    cursor = database.get_cursor()
+    query = "SELECT item_id, total from totalItemQty"
+    cursor.execute(query)
+    allitems = Item.select()
+    itemnames = sorted([item.item_name for item in allitems])
+    itemlist = {}
+    itemquants = {}
+    for item, quant in cursor:
+        itemquants[item] = quant
+    for entity in allitems:
+        itemlist[entity.item_name] = {
+            'quantity': itemquants[entity.get_id()]
+        }
+
+    return render_template('itemaudit.html', itemlist=itemlist, itemnames=itemnames)
+
+
+###
 # This function renders a template for a storage audit, which tells all of the information about
 # a particular storage
 ###
