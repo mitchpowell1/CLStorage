@@ -1,72 +1,73 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>CL Storage</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <!-- Bootstrap -->
-        <link href="{{url_for('static', filename='bootstrap/css/bootstrap.min.css')}}" rel="stylesheet" media="screen">
-        <link rel="stylesheet" href="{{url_for('static',filename='bootstrap/css/nomoretables.css')}}" media="screen">
-        <link rel="stylesheet" href="{{url_for('static',filename='bootstrap/css/login.css')}}" media="screen">
+<head>
+    <title>CL Storage</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap -->
+    <link href="{{url_for('static', filename='bootstrap/css/bootstrap.min.css')}}" rel="stylesheet" media="screen">
+    <link rel="stylesheet" href="{{url_for('static',filename='bootstrap/css/nomoretables.css')}}" media="screen">
+    <link rel="stylesheet" href="{{url_for('static',filename='bootstrap/css/login.css')}}" media="screen">
 
-    </head>
-    <header>
-        <div class="navbar">
-            <div class="navbar-inner">
-                <a class="brand" href="/">Campus Life Storage Organizer</a>
-                <ul class="nav pull-right">
-                    <li><a href="/">Search Storages</a></li>
-                    <li class="dropdown" id="menuAudit">
-                        <a class="dropdown-toggle" href="#" data-toggle="dropdown" id="auditMenu">
-                            Audit
-                            </a>
-                              <ul class="dropdown-menu">
-                                  <li><a href="/storage-reports/">Storage Audit</a></li>
-                                  <li><a href="/item-reports/">Item Audit</a></li>
-                                  <li><a href="/logs/">Movement Logs</a>
-                              </ul>
-                        </li>
-                    {% if session['loggedin'] %}
-                    <li class="dropdown" id="menuUpdate">
-                        <a class="dropdown-toggle" href="#" data-toggle="dropdown" id="updatesMenu">
-                            Updates
-                            </a>
-                              <ul class="dropdown-menu">
-                                  <li><a href="/move/">Move Items</a></li>
-                                  <li><a href="/edititem/">Edit Item Names/Descriptions</a></li>
-                                  <li><a href="/newitem/">Add New Item Type</a></li>
-                                  <li><a href="/additem/">Add To Storage</a></li>
-                                  <li><a href="/removeitem/">Remove From Storage</a></li>
-                              </ul>
-                        </li>
-
-                    </li>
-                    {% else %}
-                    <li class="disabled"><a href="#">Updates</a></li>
-                    {% endif %}
-			        <ul class="nav pull-right">
-                        {% if session['loggedin'] %}
-                        <li><a href="/logout/">Log Out</a></li>
-                        {% else %}
-                        <li class="dropdown" id="menuLogin">
-                            <a class="dropdown-toggle" href="#" data-toggle="dropdown" id="navLogin">Login</a>
-                            <div class="dropdown-menu" style="padding:17px;">
-                                <form class="form" id="formLogin" action="/login/" method="POST">
-                                    <input name="username" id="username" placeholder="Username" type="text">
-                                    <input name="password" id="password" placeholder="Password" type="password"><br>
-                                    <button type="Submit" id="btnLogin" class="btn">Login</button>
-                                </form>
-                            </div>
-                        </li>
-                        {% endif %}
+</head>
+<header>
+    <div class="navbar">
+        <div class="navbar-inner">
+            <a class="brand" href="/">Campus Life Storage Organizer</a>
+            <ul class="nav pull-right">
+                <li><a href="/">Search Storages</a></li>
+                <li class="dropdown" id="menuAudit">
+                    <a class="dropdown-toggle" href="#" data-toggle="dropdown" id="auditMenu">
+                        Audit
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a href="/storage-reports/">Storage Audit</a></li>
+                        <li><a href="/item-reports/">Item Audit</a></li>
+                        <li><a href="/logs/">Movement Logs</a>
                     </ul>
+                </li>
+                {% if session['loggedin'] %}
+                <li class="dropdown" id="menuUpdate">
+                    <a class="dropdown-toggle" href="#" data-toggle="dropdown" id="updatesMenu">
+                        Updates
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a href="/move/">Move Items</a></li>
+                        <li><a href="/edititem/">Edit Item Names/Descriptions</a></li>
+                        <li><a href="/newitem/">Add New Item Type</a></li>
+                        <li><a href="/additem/">Add To Storage</a></li>
+                        <li><a href="/removeitem/">Remove From Storage</a></li>
+                    </ul>
+                </li>
+
+                </li>
+                {% else %}
+                <li class="disabled"><a href="#" data-toggle="tooltip" title="You must be logged in to make updates.">Updates</a>
+                </li>
+                {% endif %}
+                <ul class="nav pull-right">
+                    {% if session['loggedin'] %}
+                    <li><a href="/logout/">Log Out</a></li>
+                    {% else %}
+                    <li class="dropdown" id="menuLogin">
+                        <a class="dropdown-toggle" href="#" data-toggle="dropdown" id="navLogin">Login</a>
+                        <div class="dropdown-menu" style="padding:17px;">
+                            <form class="form" id="formLogin" action="/login/" method="POST">
+                                <input name="username" id="username" placeholder="Username" type="text">
+                                <input name="password" id="password" placeholder="Password" type="password"><br>
+                                <button type="Submit" id="btnLogin" class="btn">Login</button>
+                            </form>
+                        </div>
                     </li>
+                    {% endif %}
                 </ul>
-            </div>
+                </li>
+            </ul>
         </div>
-    </header>
+    </div>
+</header>
 
-    {% block body %}{% endblock %}
+{% block body %}{% endblock %}
 
-      <script src="http://code.jquery.com/jquery.js"></script>
-      <script src="{{url_for('static', filename='bootstrap/js/bootstrap.min.js')}}"></script>
-    </html>
+<script src="http://code.jquery.com/jquery.js"></script>
+<script src="{{url_for('static', filename='bootstrap/js/bootstrap.min.js')}}"></script>
+</html>
