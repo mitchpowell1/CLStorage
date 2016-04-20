@@ -191,9 +191,9 @@ def submit_move(storage_name):
     print item
     to_storage = Storage.get(Storage.room_name == request.form['toStorage'].strip()).get_id()
     from_storage = Storage.get(Storage.room_name == storage_name.strip()).get_id()
-    procargs=(item,from_storage,to_storage,number)
+    procargs = (item, from_storage, to_storage, number)
     cursor = database.get_cursor()
-    cursor.callproc("move_item",procargs)
+    cursor.callproc("move_item", procargs)
     cursor.close()
     return root("Item Successfully moved")
 
@@ -209,7 +209,7 @@ def add_new_item():
 ###
 # Finalizes the submission of a new item type
 ###
-@app.route('/submit-new-item/',methods=['POST'])
+@app.route('/submit-new-item/', methods=['POST'])
 def submit_new_item():
     item_name = request.form['itemName'].strip()
     if len(item_name) == 0:
@@ -218,11 +218,11 @@ def submit_new_item():
     else:
         try:
             Item.create(
-                item_name=request.form['itemName'].strip(),
-                item_description=request.form['itemDescription'].strip()
+                    item_name=request.form['itemName'].strip(),
+                    item_description=request.form['itemDescription'].strip()
             )
         except IntegrityError:
-            message = "Item '"+item_name+"' already exists."
+            message = "Item '" + item_name + "' already exists."
             return render_template("newitem.html", message=message)
     return root("Item Type Added!")
 
@@ -231,15 +231,38 @@ def submit_new_item():
 # This function routes to the Add Item to Storage button in the updates menu
 ###
 @app.route('/additem/')
-def add_to_storage():
-    items = [items.item_name for items in Item.select()]
-    itemtoAdd = request.form['item']
-    storagetoInsert = request.form['storage']
-    for item in items:
-        stored = Stored.select().join(Item).group_by(Stored.item)
-        if itemtoAdd != stored.item:
-            storagetoInsert.insert(itemtoAdd)
-    return render_template("additem.html")
+def add_to_storage(warnings=None):
+    storages = [storage.room_name for storage in Storage.select()]
+    items = [item.item_name for item in Item.select()]
+
+    return render_template("additem.html", storages=storages, items=items, warnings=warnings)
+
+
+###
+# Processes the addition of an item to a storage
+###
+@app.route('/submit-add/', methods=['POST'])
+def submit_addition():
+    storage_name = request.form['storage']
+    item_name = request.form['item']
+    if request.form['quantity'] == "":
+        return add_to_storage("Please select a valid quantity")
+    else:
+        quantity = int(request.form['quantity'])
+    item = Item.get(Item.item_name == item_name)
+    storage = Storage.get(Storage.room_name == storage_name)
+    try:
+        Stored.create(
+                item=item,
+                storage=storage,
+                item_qty=quantity
+        )
+        return root(str(quantity) + " of item " + item_name + " added to storage " + storage_name)
+    except IntegrityError:
+        stored = Stored.get(Stored.item == item, Stored.storage == storage)
+        stored.item_qty = (stored.item_qty + quantity)
+        stored.save()
+        return root(str(quantity) + " of item " + item_name + " added to storage " + storage_name)
 
 
 ###
@@ -254,7 +277,7 @@ def remove_from_storage():
 ###
 # This function routes to the removal page once a storage has been selected
 ###
-@app.route("/remove-from/", methods = ["POST"])
+@app.route("/remove-from/", methods=["POST"])
 def remove_from_selected():
     storage_name = request.form['storage']
     storage_items = [entity.item.item_name
@@ -275,14 +298,15 @@ def submit_remove(storage_name):
         storage_items = [entity.item.item_name for entity in Stored.select().join(Storage)
             .where(Storage.room_name == storage_name)]
         return render_template('removefrom.html', storage_name=storage_name, storage_items=storage_items,
-                               warnings="There are not that many "+request.form['item']+"s in the storage")
+                               warnings="There are not that many " + request.form['item'] + "s in the storage")
     elif stored.item_qty == int(request.form['quantity']):
         stored.delete_instance()
-        return root("All "+request.form['item']+"s successfuly removed from "+storage_name)
+        return root("All " + request.form['item'] + "s successfuly removed from " + storage_name)
     else:
         stored.item_qty = (stored.item_qty - int(request.form['quantity']))
         stored.save()
-        return root(request.form['quantity']+" "+request.form['item']+"s successfully removed from "+storage_name)
+        return root(
+            request.form['quantity'] + " " + request.form['item'] + "s successfully removed from " + storage_name)
 
 
 ###

@@ -1,21 +1,34 @@
 {% extends "header.html" %}
 {% block body %}
 <body>
-        <body>
-            <div class="form-group container">
-                <h2>Add Item to a Storage</h2>
-                <form action = '/select/' method="POST">
-                    <label for="storage">Select Storage:</label>
-                    <select class="form-control" id="storage", name="storage">
-                        <option>Put Storages Here</option>
-                    </select>
-                    <label for="item">Select Item:</label>
-                    <select class="form-control" id="item", name="item">
-                        <option>Put Items Here</option>
-                    </select>
-                    <input type="submit" value ="Go!"/>
-                </form>
-            </div>
-        </body>
+<body>
+<div class="form-group container">
+    {% if warnings %}
+    <div class="alert alert-danger">
+        {{warnings}}
+    </div>
+    {% endif %}
+    <h2>Add Item to a Storage</h2>
+    <form action='/submit-add/' method="POST">
+        <label for="storage">Select Storage:</label>
+        <select class="form-control" id="storage" , name="storage">
+            {% for storage in storages %}
+            <option>{{storage}}</option>
+            {% endfor %}
+        </select>
+        <label for="item">Select Item:</label>
+        <select class="form-control" id="item" , name="item">
+            {% for item in items %}
+            <option>{{item}}</option>
+            {% endfor %}
+        </select>
+        <label for="quantity">Quantity:</label>
+        <input type="number" id="quantity" name="quantity" min="1" val="">
+        <input type="submit" value="Go!"/>
+    </form>
+    <a href="/" class="btn btn-default btn-sm" role="button">Take Me Home!</a>
+
+</div>
+</body>
 </body>
 {% endblock %}
