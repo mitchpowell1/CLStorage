@@ -210,6 +210,13 @@ def submit_new_item():
 ###
 @app.route('/additem/')
 def add_to_storage():
+    items = [items.item_name for items in Item.select()]
+    itemtoAdd = request.form['item']
+    storagetoInsert = request.form['storage']
+    for item in items:
+        stored = Stored.select().join(Item).group_by(Stored.item)
+        if itemtoAdd != stored.item:
+            storagetoInsert.insert(itemtoAdd)
     return render_template("additem.html")
 
 
