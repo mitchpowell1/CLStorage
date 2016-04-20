@@ -103,6 +103,9 @@ def item_audit():
     return render_template('itemaudit.html', itemlist=itemlist, itemnames=itemnames)
 
 
+###
+# Generates the Logs page under the audit tab
+###
 @app.route('/logs/')
 def get_logs():
     logs = sorted([{'attribute': log.attribute,
@@ -163,6 +166,45 @@ def user_login():
 def user_logout():
     session['loggedin'] = False
     return root()
+
+
+###
+# Sends the User to a page where they can edit items
+###
+@app.route('/edititem/')
+def edit_item_page():
+    items = sorted([item.item_name for item in Item.select()])
+    return render_template("edititems.html", items=items)
+
+
+@app.route('/edit-page/', methods=['POST'])
+def edit_item(itemname=None, warning=None):
+    if itemname is None:
+        itemname = request.form['item']
+
+    item = Item.get(Item.item_name == itemname)
+    item_details = {
+        "name":item.item_name,
+        "description": item.item_description
+    }
+    return render_template("itemeditform.html", item_details=item_details, warning=warning)
+
+
+@app.route('/submit-item-edit/', methods=['POST'])
+def submit_item_edit():
+    item_name = request.form['oldName']
+    item = Item.get(Item.item_name == item_name)
+    newname = request.form['itemName']
+    newdes = request.form['itemDescription']
+    if len(newname.strip()) == 0:
+        return edit_item(itemname=item_name, warning="Please use a valid item name")
+    try:
+        item.item_name = newname
+        item.item_description = newdes
+        item.save()
+        return root("Details for item "+newname+" updated successfully")
+    except IntegrityError:
+        return edit_item(itemname=item_name, warning="The item name '"+newname+"' is already taken.")
 
 
 ###
