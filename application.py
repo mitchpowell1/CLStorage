@@ -95,6 +95,7 @@ def item_audit():
     itemquants = {}
     for item, quant in cursor:
         itemquants[item] = quant
+    cursor.close()
     for entity in allitems:
         itemlist[entity.item_name] = {
             'quantity': itemquants[entity.get_id()]
