@@ -1,22 +1,27 @@
 {% extends "header.html" %}
-
-{% block body %}
+{% block body%}
 <body>
 <div class="container">
-    <h3>Item Totals</h3>
+    <h3>Storage Logs (Don't worry about it)</h3>
     <div id="no-more-tables" class="table-responsive">
         <table class="table col-md-12 table-condensed  table-striped cf">
             <thead class="cf">
             <tr>
-                <th>Item Name</th>
-                <th>Total Quantity</th>
+                <th>Time</th>
+                <th>Attribute</th>
+                <th>Old</th>
+                <th>New</th>
+                <th>Table</th>
             </tr>
             </thead>
             <tbody>
             {% for log in logs %}
             <tr>
-                <td data-title="Item Name">{{item}}</td>
-                <td data-title="Total Quantity">{{itemlist[item]['quantity']}}</td>
+                <td data-title="Time">{{log['time']}}</td>
+                <td data-title="Attribute">{{log['attribute']}}</td>
+                <td data-title="Old">{{log['old']}}</td>
+                <td data-title="New">{{log['new']}}</td>
+                <td data-title="Table">{{log['table']}}</td>
             </tr>
             {% endfor %}
             </tbody>

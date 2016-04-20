@@ -103,6 +103,17 @@ def item_audit():
     return render_template('itemaudit.html', itemlist=itemlist, itemnames=itemnames)
 
 
+@app.route('/logs/')
+def get_logs():
+    logs = sorted([{'attribute': log.attribute,
+                    'new': log.new_value,
+                    'old': log.old_value,
+                    'table': log.table_name,
+                    'time': log.time_changed} for log in Tracking.select()], key=lambda k: k['time'], reverse=True)
+
+    return render_template("logs.html", logs=logs)
+
+
 ###
 # This function renders a template for a storage audit, which tells all of the information about
 # a particular storage
@@ -232,8 +243,8 @@ def submit_new_item():
 ###
 @app.route('/additem/')
 def add_to_storage(warnings=None):
-    storages = [storage.room_name for storage in Storage.select()]
-    items = [item.item_name for item in Item.select()]
+    storages = sorted([storage.room_name for storage in Storage.select()])
+    items = sorted([item.item_name for item in Item.select()])
 
     return render_template("additem.html", storages=storages, items=items, warnings=warnings)
 
@@ -280,8 +291,8 @@ def remove_from_storage():
 @app.route("/remove-from/", methods=["POST"])
 def remove_from_selected():
     storage_name = request.form['storage']
-    storage_items = [entity.item.item_name
-                     for entity in Stored.select().join(Storage).where(Storage.room_name == storage_name)]
+    storage_items = sorted([entity.item.item_name
+                     for entity in Stored.select().join(Storage).where(Storage.room_name == storage_name)])
     return render_template("removefrom.html", storage_name=storage_name, storage_items=storage_items)
 
 
@@ -306,7 +317,7 @@ def submit_remove(storage_name):
         stored.item_qty = (stored.item_qty - int(request.form['quantity']))
         stored.save()
         return root(
-            request.form['quantity'] + " " + request.form['item'] + "s successfully removed from " + storage_name)
+                request.form['quantity'] + " " + request.form['item'] + "s successfully removed from " + storage_name)
 
 
 ###
