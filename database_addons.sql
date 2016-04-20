@@ -188,7 +188,7 @@ create trigger storedInsert after insert on Stored
 	FOR EACH ROW
 	BEGIN
 		insert into Tracking(table_name, attribute, old_value, new_value, time_changed) values 
-			('Stored', 'Insertion', 'Insertion', NEW.storage_id, NOW());
+			('Stored', 'Insertion', 'None', NEW.storage_id, NOW());
 
 	END$$
 delimiter ;
@@ -199,7 +199,7 @@ create trigger storedDelete after delete on Stored
 	FOR EACH ROW
 	BEGIN
 		insert into Tracking(table_name, attribute, old_value, new_value, time_changed) values 
-			('Stored', 'Deletion', OLD.storage_id, 'Deletion', NOW());
+			('Stored', 'Deletion', OLD.storage_id, 'None', NOW());
 		
 	END$$
 delimiter ;
@@ -232,7 +232,7 @@ create trigger itemInsert after insert on Item
 	FOR EACH ROW
 	BEGIN
 		insert into Tracking(table_name, attribute, old_value, new_value, time_changed) values 
-			('Item', 'Insertion', 'Insertion', NEW.item_id, NOW());
+			('Item', 'Insertion', 'None', NEW.item_id, NOW());
 
 	END$$
 delimiter ;
@@ -243,7 +243,7 @@ create trigger itemDelete after delete on Item
 	FOR EACH ROW
 	BEGIN
 		insert into Tracking(table_name, attribute, old_value, new_value, time_changed) values 
-			('Item', 'Deletion', OLD.item_id, 'Deletion', NOW());
+			('Item', 'Deletion', OLD.item_id, 'None', NOW());
 		
 	END$$
 delimiter ;
@@ -286,7 +286,7 @@ create trigger storageInsert after insert on Storage
 	FOR EACH ROW
 	BEGIN
 		insert into Tracking(table_name, attribute, old_value, new_value, time_changed) values 
-			('Storage', 'Insertion', 'Insertion', NEW.storage_id, NOW());
+			('Storage', 'Insertion', 'None', NEW.storage_id, NOW());
 
 	END$$
 delimiter ;
@@ -297,7 +297,7 @@ create trigger storageDelete after delete on Storage
 	FOR EACH ROW
 	BEGIN
 		insert into Tracking(table_name, attribute, old_value, new_value, time_changed) values 
-			('Storage', 'Deletion', OLD.storage_id, 'Deletion', NOW());
+			('Storage', 'Deletion', OLD.storage_id, 'None', NOW());
 		
 	END$$
 delimiter ;
@@ -326,7 +326,7 @@ create trigger buildingInsert after insert on Building
 	FOR EACH ROW
 	BEGIN
 		insert into Tracking(table_name, attribute, old_value, new_value, time_changed) values 
-			('Building', 'Insertion', 'Insertion', NEW.build_id, NOW());
+			('Building', 'Insertion', 'None', NEW.build_id, NOW());
 
 	END$$
 delimiter ;
@@ -337,7 +337,7 @@ create trigger buildingDelete after delete on Building
 	FOR EACH ROW
 	BEGIN
 		insert into Tracking(table_name, attribute, old_value, new_value, time_changed) values 
-			('Building', 'Deletion', OLD.build_id, 'Deletion', NOW());
+			('Building', 'Deletion', OLD.build_id, 'None', NOW());
 		
 	END$$
 delimiter ;
@@ -366,7 +366,7 @@ create trigger storekeyInsert after insert on StoreKey
 	FOR EACH ROW
 	BEGIN
 		insert into Tracking(table_name, attribute, old_value, new_value, time_changed) values 
-			('StoreKey', 'Insertion', 'Insertion', NEW.storekey_id, NOW());
+			('StoreKey', 'Insertion', 'None', NEW.storekey_id, NOW());
 
 	END$$
 delimiter ;
@@ -377,55 +377,7 @@ create trigger storekeyDelete after delete on StoreKey
 	FOR EACH ROW
 	BEGIN
 		insert into Tracking(table_name, attribute, old_value, new_value, time_changed) values 
-			('StoreKey', 'Deletion', OLD.storekey_id, 'Deletion', NOW());
+			('StoreKey', 'Deletion', OLD.storekey_id, 'None', NOW());
 		
 	END$$
 delimiter ;
-		
-/* UNUSED
-#Calculates the total amount  of each item and updates the Item table.
-#EX: call find_total()
-delimiter $$
-DROP PROCEDURE IF EXISTS find_total;
-create procedure find_total ()
-	DETERMINISTIC
-	BEGIN
-		create temporary table TempTable (item_id varchar(6),total_qty int);
-		insert into TempTable (select item_id, sum(item_qty) from Stored group by item_id);
-		
-		 if exists (select * from information_schema.columns where table_name = 'Item' and column_name = 'total_qty') 
-			then alter table Item drop column total_qty;
-		 end if;
-		alter table Item ADD total_qty int unsigned NOT NULL default 0;
-		
-		update Item
-		Item inner join TempTable on Item.item_id = TempTable.item_id
-		set Item.total_qty = TempTable.total_qty;
-		
-		drop table TempTable;
-	END$$
-delimiter ;
-
-#Update the total qty of the items after an update or addition of an item
-drop trigger if exists updateTotal;
-delimiter $$
-create trigger updateTotal after update on Stored
-	FOR EACH ROW
-	BEGIN
-		call find_total();
-	END$$
-	
-delimiter ;
-
-drop trigger if exists updateTotal2;
-delimiter $$
-create trigger updateTotal2 after insert on Stored
-	FOR EACH ROW
-	BEGIN
-		call find_total();
-	END$$
-	
-delimiter ;
-
-call find_total();
-*/
