@@ -10,6 +10,19 @@ create view storagesAndKeyMatches as
 	select storage_id, storekey_id
 	from Storage;
 	
+drop view if exists techStorageItems;
+create view techStorageItems as 
+	(select Item.item_id, Item.item_name 
+		from Stored natural join Item join Storage on Storage.storage_id = Stored.storage_id 
+		where Storage.storage_id = '57010'
+	)
+	union 
+	(select Item.item_id, Item.item_name 
+		from Stored natural join Item join Storage on Storage.storage_id = Stored.storage_id 
+		where Storage.storage_id = '57009'
+	);
+
+	
 drop view if exists techStorages;
 create view techStorages as
 	select storage_id, build_id, room_number, room_name
